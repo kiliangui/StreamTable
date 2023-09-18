@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore,collection, getDocs, getDoc, query, where, limit, connectFirestoreEmulator } from "firebase/firestore";
+import {getStorage} from "firebase/storage"
 import {connectAuthEmulator, getAuth} from "firebase/auth"
 // TODO: Replace the following with your app's Firebase project configuration
 // See: https://support.google.com/firebase/answer/7015592
@@ -25,7 +26,9 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 //connectFirestoreEmulator(db, '127.0.0.1', 8080);
 
-export const auth = getAuth()
+export const auth = getAuth(app)
 //connectAuthEmulator(auth,"http://127.0.0.1:9099")
+export const storage = getStorage(app)
+
 
 export const pagesRef = collection(db, "/pages");

@@ -3,7 +3,7 @@ import {db, pagesRef} from "../utils/firebase"
 import { useEffect, useState } from "react"
 import "./Page.css"
 
-export default function Page({loc,region}){
+export default function Page({loc,region,addNav}){
     const langs = {
         "fr" : {
             "CreatePage" : "Crée ta page",
@@ -14,7 +14,8 @@ export default function Page({loc,region}){
             "Today" : "Aujourd'hui",
             "StartIn" : "Commence dans : ",
             "StopIn" : "Fini dans : ",
-            "NotifyMe" : "Activer le rappelle !"
+            "NotifyMe" : "Activer le rappelle !",
+            "Days" : "jours"
         },
         "us" : {
             "CreatePage" : "Create your page",
@@ -25,7 +26,8 @@ export default function Page({loc,region}){
             "Today" : "Today",
             "StartIn" : "Start in : ",
             "StopIn" : "Stop in :",
-            "NotifyMe" : "Notify me !"
+            "NotifyMe" : "Notify me !",
+            "Days" : "days"
         }
     }
 
@@ -38,9 +40,11 @@ export default function Page({loc,region}){
   const [streams,setStreams] = useState([])
   const [pseudo, setPseudo] = useState("")
   const [background, setBackground] = useState("")
-  const [links, setLinks] = useState({})
+  const [links, setLinks] = useState([])
+  const [pdp, setPdp] = useState("")
 
   useEffect(()=>{
+    // TODO move the data fetching to the App.jsx (DRY : dashboard.jsx)
     //Getting Page
     if (loc[1] == "u"){ // checking if we are on the good page
       const q = query(pagesRef,where("slug", "==", loc[2]),limit(1))
@@ -52,6 +56,7 @@ export default function Page({loc,region}){
                   setBackground(data.background)
                   setLinks(data.links)
                   setPseudo(data.pseudo)
+                  setPdp(data.pdp)
                   //Getting Streams
                   console.log("/pages/"+doc.id+"/streams");
                   let streamsRef = collection(db,"/pages/"+doc.id+"/streams")
@@ -87,7 +92,7 @@ export default function Page({loc,region}){
           
 
     <div>
-        <img id="pdp" src="./istockphoto-657125714-612x612.jpg" alt="Streamer pdp"/>
+        <img id="pdp" src={pdp} alt="Streamer pdp"/>
         <h2>{pseudo}</h2>
 
     </div>
@@ -97,9 +102,10 @@ export default function Page({loc,region}){
     <ul>
       {
 
-        Object.keys(links).map((key)=>{
-          let link = links[key]
-          return <li key={key}><a href={link}>{key}</a></li>
+        links.map((link)=>{
+          let url = link["url"]
+          let name = link["name"]
+          return <li key={url}><a href={url}>{name}</a></li>
         })
       }
         
@@ -112,10 +118,10 @@ export default function Page({loc,region}){
         {streams.map((stream)=>{
           let date_fin = stream.date_fin.toDate()
           let date_debut = stream.date_debut.toDate()
-          let now = new Date()
           let timeDif;
+          // check if the stream is live
+          const now = new Date()
           let started=false;
-          
           if (date_debut < now){
             started = true;
             timeDif = date_fin - now
@@ -126,46 +132,39 @@ export default function Page({loc,region}){
           const getMinutes = (seconds) => Math.floor(seconds/60/1000)
           const getHours = (seconds) => Math.floor(getMinutes(seconds)/60)
           const getDay = (seconds) => Math.floor(getHours(seconds)/24)
-
+          // prepare stream in : ...h/days
           const day = getDay(timeDif)
           timeDif = timeDif-day*24*60*60*1000;
-          const hours = getHours(timeDif) 
-          timeDif = timeDif-hours*60*60*1000;
-          const minutes = getMinutes(timeDif)
           if (day){
-
-          }else if( hours < 23 ){
+              stream.timeDif = day+" "+lang["Days"]
+          }else{
+            const hours = getHours(timeDif) 
+            timeDif = timeDif-hours*60*60*1000;
+            if( hours < 23 ){
               stream.timeDif = hours+"h"+minutes
-          }
-          console.log("stream : ",stream);
-
+            }
+          } 
           return <li key={stream.id} className="card">
-          <img src={stream.img} alt=""/>
-          <div className="content">
-              <div className="title">
-                  <h4>{ stream.category }</h4>
-                  {stream.started ? <span className="badge">{ lang.Now }</span> : 
-                  <span>Notif</span>}
-              </div>
-              <div>
-                  <p>
-                      22h30 - 01h45
-                  </p>
-                  <p>{stream.started ? lang.StopIn : lang.StartIn } {stream.timeDif}</p>
-              </div>
-              {stream.started ? 
-              <a href={stream.url} className="btn">{lang.GoToStream}</a>
-              :
-              <a href={""} className="btn">{lang.NotifyMe}</a>
-        }
-          </div>
-      </li>
+                  <img src={stream.img} alt=""/>
+                  <div className="content">
+                      <div className="title">
+                          <h4>{ stream.category }</h4>
+                          {stream.started ? 
+                          <span className="badge">{ lang.Now }</span> 
+                          : 
+                          <span className="material-symbols-outlined" style={{padding:"0.2rem", fontSize:"large", cursor:"pointer"}} 
+                          onClick={()=>{Notification.requestPermission()}}>notifications</span>}
+                      </div>
+                      <div>
+                          <p>{stream.started ? lang.StopIn : lang.StartIn } {stream.timeDif}</p>
+                          <p>{date_debut.getHours()}h{date_debut.getMinutes()} - {date_fin.getHours()}h{date_fin.getMinutes()}</p>
+                      </div> 
+                      <a href={stream.url} className="btn">{lang.GoToStream}</a>
+                  </div>
+              </li>
         })}
         
     </ul>
 </section>
-
-
-<script src="/script.js"></script>
     </>
 }

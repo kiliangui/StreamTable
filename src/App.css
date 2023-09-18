@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,800&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,800&display=swap');
 h1, h2, h3, h4 {
     font-family: 'Raleway', sans-serif;
 }
@@ -20,7 +20,6 @@ h4{
         align-items: center;
         min-height: 100vh;
         max-height: 100vh;
-        padding-block: 2rem;
         box-sizing: border-box;
         & main{
             color: black;
@@ -86,8 +85,15 @@ a, .btn {
     & ul{
         display: flex;
         gap: .5rem;
+        align-items: stretch;
         & li{
+            display: flex;
+            align-items: center;
             list-style: none;
+            & a {
+                box-sizing: border-box;
+                height: 100%;
+            }
         }
     }
     
@@ -106,6 +112,18 @@ input{
     border-radius: 10px;
     border-width: 0;
     cursor: pointer;
+}
+
+.emoji{
+    font-family: 'Noto Color Emoji', sans-serif;
+}
+
+.confirmBtns{
+    display: flex;
+    gap: 1rem ;
+    & *{
+        flex:1
+    }
 }
 
 .hidden{

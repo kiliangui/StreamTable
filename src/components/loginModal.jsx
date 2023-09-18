@@ -26,13 +26,13 @@ function Login({setUser}){
             }}>
             <div>
                 <label htmlFor="loginMail">Email</label>
-                <input onChange={(event)=>{
+                <input placeholder="Email" onChange={(event)=>{
                     setEmail(event.target.value)
                 }} value={email} type="email" name="email" id="loginMail" />
             </div>
             <div>
                 <label htmlFor="passwordLogin">Password</label>
-                <input onChange={(event)=>{
+                <input placeholder="Password" onChange={(event)=>{
                     setPassword(event.target.value)
                 }} value={password} type="password" name="password" id="passwordLogin" />
             </div>
@@ -60,19 +60,19 @@ function Create({setUser}){
             }}>
             <div>
                 <label htmlFor="createMail">Email</label>
-                <input onChange={(event)=>{
+                <input placeholder="Email" onChange={(event)=>{
                     setEmail(event.target.value)
                 }} value={email} type="email" name="email" id="createMail" />
             </div>
             <div>
                 <label htmlFor="passwordCreate">Password</label>
-                <input onChange={(event)=>{
+                <input placeholder="Password" onChange={(event)=>{
                     setPassword(event.target.value)
                 }} value={password} type="password" name="password" id="passwordCreate" />
             </div>
             <div>
                 <label htmlFor="password_cCreate">Password confirmation</label>
-                <input onChange={(event)=>{
+                <input placeholder="Password confirmation" onChange={(event)=>{
                     setPassword_c(event.target.value)
                 }} value={password_c} type="password" name="password_c" id="password_cCreate" />
             </div>

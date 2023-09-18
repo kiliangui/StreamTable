@@ -1,6 +1,8 @@
 # Stream table
 
-Stream table permet aux streamers de partager les liens vers leurs différents réseaux sociaux (à la façon de linktree) tout en affichant leurs prochains streams.
+StreamTable permet aux streamers de partager les liens vers leurs différents réseaux sociaux (à la façon de linktree) tout en affichant leurs prochains streams.
+
+[StreamTable](https://streamtable.kiliangui.fr/)
 
 ## Projet en cours de développement.
 
