@@ -18,7 +18,8 @@ const firebaseConfig = {
   messagingSenderId: "792357112932",
   appId: "1:792357112932:web:8df057858bcf96ea17e371",
   measurementId: "G-06SKNJLP86"
-};
+}; // Cette valeur est faite pour etre publique et connu de l'utilisateur
+// Les requetes ne sont prise en compte que si envoyer par sources autorisé (site,application...) et il y as une verification des envoies au niveau de firebase
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
